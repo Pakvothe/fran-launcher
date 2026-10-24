@@ -1,0 +1,58 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'pakvothe.franlauncher.tablet'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'pakvothe.franlauncher.tablet'
+        minSdk 29
+        targetSdk 36
+        versionCode 1
+        versionName '1.0'
+        // Alias HOME prendido: aparece en el selector de inicio. -PhomeEnabled=false lo apaga.
+        manifestPlaceholders = [homeEnabled: project.findProperty('homeEnabled') ?: 'true']
+    }
+
+    // La clave de release vive fuera del repo: ~/.config/fran-launcher/signing.properties
+    // (storeFile, storePassword, keyAlias, keyPassword). Sin ese archivo, el release se firma con la de debug.
+    def signingFile = new File(System.getProperty('user.home'), '.config/fran-launcher/signing.properties')
+    signingConfigs {
+        if (signingFile.exists()) {
+            def p = new Properties()
+            signingFile.withInputStream { p.load(it) }
+            release {
+                storeFile new File(p.storeFile)
+                storePassword p.storePassword
+                keyAlias p.keyAlias
+                keyPassword p.keyPassword
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+            signingConfig signingFile.exists() ? signingConfigs.release : signingConfigs.debug
+        }
+    }
+
+    buildFeatures {
+        buildConfig false
+        resValues false
+    }
+
+    // La fuente se mapea directo desde el APK: sin comprimir, ahorra la descompresión en el arranque.
+    androidResources { noCompress 'ttf' }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation project(':core')
+}

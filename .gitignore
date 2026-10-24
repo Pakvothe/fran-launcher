@@ -1,0 +1,8 @@
+.DS_Store
+*.dmg
+bench-results/
+*.jks
+*.keystore
+signing.properties
+CLAUDE.md
+dist/

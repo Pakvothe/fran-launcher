@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ícono de la app: dos orbes sobre el atardecer. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp" android:height="48dp"
+    android:viewportWidth="48" android:viewportHeight="48">
+    <path android:fillColor="#FF2A1630"
+        android:pathData="M10,0h28a10,10 0 0,1 10,10v28a10,10 0 0,1 -10,10h-28a10,10 0 0,1 -10,-10v-28a10,10 0 0,1 10,-10z" />
+    <path android:fillColor="#FFFF7A59" android:pathData="M6,18a12,12 0 1,0 24,0a12,12 0 1,0 -24,0" />
+    <path android:fillColor="#FF7B5CFF" android:pathData="M20,32a10,10 0 1,0 20,0a10,10 0 1,0 -20,0" />
+</vector>
