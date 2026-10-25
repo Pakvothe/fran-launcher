@@ -5,18 +5,19 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Peso por uso de las favoritas: tiempo en pantalla de 7 días + el de hoy contado doble.
- * Histéresis: dos vecinas solo cambian de lugar si la de abajo pesa más de un 20% que la de arriba,
+ * Peso por uso de las favoritas: tiempo en pantalla de los 2 días anteriores + el de hoy contado triple, para que
+ * el orden siga lo que se usa estos días (no la semana) y lo que se usa mucho hoy suba enseguida.
+ * Histéresis: dos vecinas solo cambian de lugar si la de abajo pesa más de un 10% que la de arriba,
  * para que la home no salte a cada rato.
  */
 public final class Ranking {
-    public static final float HYSTERESIS = 1.2f;
+    public static final float HYSTERESIS = 1.1f;
 
     private Ranking() {}
 
     public static long weight(String pkg, Map<String, Long> week, Map<String, Long> today) {
         Long w = week.get(pkg), t = today.get(pkg);
-        return (w == null ? 0 : w) + (t == null ? 0 : t);
+        return (w == null ? 0 : w) + 3 * (t == null ? 0 : t);
     }
 
     /**

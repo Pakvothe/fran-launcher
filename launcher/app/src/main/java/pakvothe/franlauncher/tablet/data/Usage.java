@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Tiempo en pantalla por paquete (7 días y hoy). Se consulta en el hilo de I/O: hoy al volver a la home,
- * la semana una vez por día (la consulta de 7 días es la cara: muchos objetos nativos que el asignador retiene).
+ * Tiempo en pantalla por paquete: los 2 días anteriores completos ("week", sin hoy) y hoy. Se consulta en el hilo
+ * de I/O: hoy al volver a la home, los días anteriores una vez por día (no cambian durante el día).
  */
 public final class Usage {
     public final Map<String, Long> week = new HashMap<>(), today = new HashMap<>();
@@ -32,12 +32,13 @@ public final class Usage {
         long now = System.currentTimeMillis();
         Usage u = new Usage();
         if (week != null) u.week.putAll(week);
-        else fill(usm.queryAndAggregateUsageStats(now - 7L * 86_400_000L, now), u.week);
-        fill(usm.queryAndAggregateUsageStats(midnight(now), now), u.today);
+        long midnight = midnight(now);
+        if (week == null) fill(usm.queryAndAggregateUsageStats(midnight - 2L * 86_400_000L, midnight), u.week);
+        fill(usm.queryAndAggregateUsageStats(midnight, now), u.today);
         return u;
     }
 
-    /** Clave del día local: la semana se vuelve a consultar cuando cambia. */
+    /** Clave del día local: los días anteriores se vuelven a consultar cuando cambia. */
     public static long midnight(long now) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(now);

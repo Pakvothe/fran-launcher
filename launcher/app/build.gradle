@@ -8,8 +8,8 @@ android {
         applicationId 'pakvothe.franlauncher.tablet'
         minSdk 29
         targetSdk 36
-        versionCode 1
-        versionName '1.0'
+        versionCode 2
+        versionName '1.1'
         // Alias HOME prendido: aparece en el selector de inicio. -PhomeEnabled=false lo apaga.
         manifestPlaceholders = [homeEnabled: project.findProperty('homeEnabled') ?: 'true']
     }
